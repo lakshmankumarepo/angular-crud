@@ -1,0 +1,97 @@
+<div class="container">
+  <div class="row" style="margin-top: 10px;">
+    <div style="text-align: center;" class="col-md">
+      <h4 *ngIf="params.operation==='add'; else view">Add New Company Detail</h4>
+      <ng-template #view>
+        <h4 *ngIf="params.operation==='view'; else edit">{{params.name}} Details</h4>
+      </ng-template>
+      <ng-template #edit>
+        <h4 *ngIf="params.operation==='edit'">Edit {{params.name}} Details</h4>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="row">
+    <form class="col-md" [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="companyName">Company Name</label>
+        <input type="text" class="form-control" id="companyName"
+          aria-describedby="companyNameHelp"
+          [ngClass]="{'invalid-control':
+            companyForm.get('companyName').invalid && companyForm.get('companyName').touched
+          }"
+          placeholder="Enter the Company Name" formControlName="companyName">
+        <small id="companyNameHelp" class="form-text text-muted">We'll never share the company details with anyone
+          else.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="companyMainBranch">Main Branch</label>
+        <input type="text" class="form-control" id="companyMainBranch"
+        [ngClass]="{'invalid-control':
+            companyForm.get('mainBranch').invalid && companyForm.get('mainBranch').touched
+          }"
+        placeholder="Main Branch"
+        formControlName="mainBranch">
+      </div>
+
+      <!-- <div class="form-group" *ngIf="companyForm.get('branches').controls.length>0"
+        formArrayName="branches">
+        <label for="companyBranches">Sub Branch(es)</label>
+        <div *ngFor="let branchControl of companyForm.get('branches').controls; let i = index">
+          <input type="text" class="form-control"
+              placeholder="Sub Branch" [formControlName]="i">
+          </div>
+      </div> -->
+
+      <div class="form-group" *ngIf="includeSubBranch">
+        <label for="companySubBranches">Sub Branches</label>
+        <textarea rows="3" class="form-control" id="companySubBranches"
+          [ngClass]="{'invalid-control':
+            includeSubBranch &&
+            companyForm.get('subBranches').invalid &&
+            companyForm.get('subBranches').touched
+          }"
+          placeholder="Sub Branches"
+          aria-describedby="companySubBranchesHelp"
+          formControlName="subBranches"></textarea>
+        <small id="companySubBranchesHelp" class="form-text text-muted">Enter each branch sperated by comma + single space</small>
+      </div>
+
+        <div class="form-group" *ngIf="params.operation !== 'view'">
+            <button type="button" class="btn btn-outline-dark" (click)="toggleSubBranchInclude()">
+              {{includeSubBranch ? "Delete SubBranches" : "Add SubBranches"}}
+            </button>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px"  *ngIf="params.operation !== 'view'">
+            <button type="button" style="margin-right: 10px;" class="btn btn-outline-dark" (click)="resetForm()">Clear</button>
+            <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': companyForm.invalid}">
+              {{params.operation === 'add' ? 'Add' : 'Update' }}
+            </button>
+        </div>
+    </form>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button type="button" class="btn btn-outline-dark" (click)="router.navigateByUrl('/')">Close</button>
+    </div>
+  </div>
+  <!-- <div class="row">
+    <div class="col-md float-right" *ngIf="params.operation !== 'view'">
+        <button class="btn btn-outline-dark" (click)="toggleSubBranchInclude()">
+          {{includeSubBranch ? "Delete SubBranches" : "Add SubBranches"}}
+        </button>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px" >
+      <div class="col-md" *ngIf="params.operation !== 'view'">
+        <button type="button" style="margin-right: 10px;" class="btn btn-outline-dark" (click)="resetForm()">Clear</button>
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': companyForm.invalid}"
+          (click)="onSubmit()">
+          {{params.operation === 'add' ? 'Add' : 'Update' }}
+        </button>
+      </div>
+  </div> -->
+</div>
